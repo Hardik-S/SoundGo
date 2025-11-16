@@ -25,27 +25,67 @@ body {
 
 
 
+.transcript-panel .error {
+
+
+
+    color: red;
+
+
+
+    font-weight: bold;
+
+
+
+}
+
+
+
+
+
+
+
 .virtual-cursor {
+
+
 
     position: absolute;
 
+
+
     width: 20px;
+
+
 
     height: 20px;
 
+
+
     background-color: black;
+
+
 
     border: 2px solid white;
 
+
+
     border-radius: 50%;
+
+
 
     transform: translate(-50%, -50%);
 
-        z-index: 9999;
 
-        pointer-events: none; /* So it doesn't interfere with mouse events on other elements */
 
-    }
+    z-index: 9999;
+
+
+
+    pointer-events: none; /* So it doesn't interfere with mouse events on other elements */
+
+
+
+}
 
     
 

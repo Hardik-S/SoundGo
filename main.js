@@ -37,9 +37,10 @@
       this.transcriptElement = element;
       this.transcriptElement.innerHTML = "<h3>Transcript</h3>";
     }
-    log(text) {
+    logError(text) {
       const p = document.createElement("p");
       p.textContent = text;
+      p.classList.add("error");
       this.transcriptElement.appendChild(p);
       this.transcriptElement.scrollTop = this.transcriptElement.scrollHeight;
     }
@@ -143,7 +144,7 @@
           console.log(`Clicking on:`, hoveredElement);
           hoveredElement.click();
         } else {
-          console.warn("No element to click.");
+          transcriptPanel.logError("Cannot click: No element is under the cursor.");
         }
         break;
       case "OPEN" /* Open */:
@@ -152,18 +153,18 @@
         break;
       case "TYPE" /* Type */:
         const typeCommand = command;
-        console.log(`Typing text: "${typeCommand.args.text}".`);
+        transcriptPanel.logError(`Command not implemented: "Type"`);
         break;
       case "SCROLL" /* Scroll */:
         const scrollCommand = command;
-        console.log(`Scrolling ${scrollCommand.args.direction} by ${scrollCommand.args.distance || "default"} units.`);
+        transcriptPanel.logError(`Command not implemented: "Scroll"`);
         break;
       case "UNKNOWN" /* Unknown */:
         const unknownCommand = command;
-        console.warn(`Unknown command: "${unknownCommand.originalText}".`);
+        transcriptPanel.logError(`Unknown command: "${unknownCommand.originalText}"`);
         break;
       default:
-        console.error("Unhandled command type:", command.type);
+        transcriptPanel.logError(`Unhandled command type: "${command.type}"`);
         break;
     }
   }
@@ -194,7 +195,7 @@
       };
       this.recognition.onerror = (event) => {
         console.error("Speech recognition error:", event.error);
-        transcriptPanel.log(`Error: ${event.error}`);
+        transcriptPanel.logError(`Speech recognition error: ${event.error}`);
         this._isListening = false;
       };
     }
