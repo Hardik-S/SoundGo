@@ -21,7 +21,11 @@ export class VirtualCursor {
         this.setPosition(this.x + dx, this.y + dy);
     }
 
-    public getPosition(): { x: number, y: number } {
-        return { x: this.x, y: this.y };
+    public getHoveredElement(): Element | null {
+        // Temporarily hide the cursor to prevent it from being the elementFromPoint
+        this.element.style.display = 'none';
+        const hoveredElement = document.elementFromPoint(this.x, this.y);
+        this.element.style.display = 'block';
+        return hoveredElement;
     }
 }

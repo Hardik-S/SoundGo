@@ -19,8 +19,11 @@
     move(dx, dy) {
       this.setPosition(this.x + dx, this.y + dy);
     }
-    getPosition() {
-      return { x: this.x, y: this.y };
+    getHoveredElement() {
+      this.element.style.display = "none";
+      const hoveredElement = document.elementFromPoint(this.x, this.y);
+      this.element.style.display = "block";
+      return hoveredElement;
     }
   };
 
@@ -31,6 +34,18 @@
       const cursor = new VirtualCursor(shellContainer);
       console.log("Virtual cursor initialized.");
       const STEP_SIZE = 10;
+      let currentHoveredElement = null;
+      const updateHoveredElement = () => {
+        const newHoveredElement = cursor.getHoveredElement();
+        if (newHoveredElement !== currentHoveredElement) {
+          if (currentHoveredElement) {
+          }
+          if (newHoveredElement) {
+            console.log("Hovering over:", newHoveredElement);
+          }
+          currentHoveredElement = newHoveredElement;
+        }
+      };
       document.addEventListener("keydown", (event) => {
         let dx = 0;
         let dy = 0;
@@ -51,8 +66,10 @@
             return;
         }
         cursor.move(dx, dy);
+        updateHoveredElement();
         event.preventDefault();
       });
+      updateHoveredElement();
     } else {
       console.error("Could not find the .win95-shell container.");
     }

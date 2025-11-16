@@ -7,6 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Virtual cursor initialized.');
 
         const STEP_SIZE = 10; // Pixels to move per key press
+        let currentHoveredElement: Element | null = null;
+
+        const updateHoveredElement = () => {
+            const newHoveredElement = cursor.getHoveredElement();
+            if (newHoveredElement !== currentHoveredElement) {
+                if (currentHoveredElement) {
+                    // Optional: Remove hover effect from previous element
+                    // currentHoveredElement.classList.remove('hovered');
+                }
+                if (newHoveredElement) {
+                    // Optional: Add hover effect to new element
+                    // newHoveredElement.classList.add('hovered');
+                    console.log('Hovering over:', newHoveredElement);
+                }
+                currentHoveredElement = newHoveredElement;
+            }
+        };
 
         document.addEventListener('keydown', (event) => {
             let dx = 0;
@@ -30,8 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             cursor.move(dx, dy);
+            updateHoveredElement(); // Check for hovered element after movement
             event.preventDefault(); // Prevent default scrolling behavior
         });
+
+        // Initial check for hovered element
+        updateHoveredElement();
 
     } else {
         console.error('Could not find the .win95-shell container.');
