@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'ArrowLeft':
                     dx = -STEP_SIZE;
                     break;
-                break;
                 case 'ArrowRight':
                     dx = STEP_SIZE;
                     break;
