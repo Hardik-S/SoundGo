@@ -10,6 +10,13 @@ class TranscriptPanel {
         this.transcriptElement.innerHTML = '<h3>Transcript</h3>'; // Initial header
     }
 
+    log(text: string) {
+        const p = document.createElement('p');
+        p.textContent = text;
+        this.transcriptElement.appendChild(p);
+        this.transcriptElement.scrollTop = this.transcriptElement.scrollHeight; // Auto-scroll to bottom
+    }
+
     logError(text: string) {
         const p = document.createElement('p');
         p.textContent = text;
