@@ -18,7 +18,7 @@ import {
  */
 export function parseCommand(transcript: string): Command {
     console.log("Parsing transcript:", transcript);
-    const lowerTranscript = transcript.toLowerCase().trim();
+    const lowerTranscript = transcript.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
     console.log("Normalized transcript:", lowerTranscript);
 
     // --- Move Cursor Command ---
