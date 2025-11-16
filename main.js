@@ -49,8 +49,12 @@
 
   // src/commands/commandParser.ts
   function parseCommand(transcript) {
+    console.log("Parsing transcript:", transcript);
     const lowerTranscript = transcript.toLowerCase().trim();
-    const moveCursorMatch = lowerTranscript.match(/^(move|go) (cursor)? (up|down|left|right)( by (\d+) (pixels)?)?$/);
+    console.log("Normalized transcript:", lowerTranscript);
+    const moveCursorRegex = /^(move|go) (cursor)? ?(up|down|left|right)( by (\d+)( pixels)?)?$/;
+    const moveCursorMatch = lowerTranscript.match(moveCursorRegex);
+    console.log("Move cursor match:", moveCursorMatch);
     if (moveCursorMatch) {
       const direction = moveCursorMatch[3];
       const distance = moveCursorMatch[5] ? parseInt(moveCursorMatch[5], 10) : void 0;
@@ -60,7 +64,9 @@
         args: { direction, distance }
       };
     }
-    const clickMatch = lowerTranscript.match(/^(click|left click|right click)$/);
+    const clickRegex = /^(click|left click|right click)$/;
+    const clickMatch = lowerTranscript.match(clickRegex);
+    console.log("Click match:", clickMatch);
     if (clickMatch) {
       let button = "left";
       if (clickMatch[1] === "right click") {
@@ -72,7 +78,9 @@
         args: { button }
       };
     }
-    const openMatch = lowerTranscript.match(/^open (.+)$/);
+    const openRegex = /^open (.+)$/;
+    const openMatch = lowerTranscript.match(openRegex);
+    console.log("Open match:", openMatch);
     if (openMatch) {
       const appName = openMatch[1].trim();
       return {
@@ -81,7 +89,9 @@
         args: { appName }
       };
     }
-    const typeMatch = lowerTranscript.match(/^type (.+)$/);
+    const typeRegex = /^type (.+)$/;
+    const typeMatch = lowerTranscript.match(typeRegex);
+    console.log("Type match:", typeMatch);
     if (typeMatch) {
       const text = typeMatch[1].trim();
       return {
@@ -90,7 +100,9 @@
         args: { text }
       };
     }
-    const scrollMatch = lowerTranscript.match(/^scroll (up|down)( by (\d+))?$/);
+    const scrollRegex = /^scroll (up|down)( by (\d+))?$/;
+    const scrollMatch = lowerTranscript.match(scrollRegex);
+    console.log("Scroll match:", scrollMatch);
     if (scrollMatch) {
       const direction = scrollMatch[1];
       const distance = scrollMatch[3] ? parseInt(scrollMatch[3], 10) : void 0;
@@ -100,6 +112,7 @@
         args: { direction, distance }
       };
     }
+    console.log("No command matched. Returning UnknownCommand.");
     return {
       type: "UNKNOWN" /* Unknown */,
       originalText: transcript
