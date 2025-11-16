@@ -37,6 +37,12 @@
       this.transcriptElement = element;
       this.transcriptElement.innerHTML = "<h3>Transcript</h3>";
     }
+    log(text) {
+      const p = document.createElement("p");
+      p.textContent = text;
+      this.transcriptElement.appendChild(p);
+      this.transcriptElement.scrollTop = this.transcriptElement.scrollHeight;
+    }
     logError(text) {
       const p = document.createElement("p");
       p.textContent = text;
