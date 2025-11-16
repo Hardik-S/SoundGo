@@ -1,4 +1,5 @@
 import { VirtualCursor } from './ui/virtualCursor';
+import { voiceListener } from './voice/voiceListener';
 
 document.addEventListener('DOMContentLoaded', () => {
     const shellContainer = document.querySelector<HTMLElement>('.win95-shell');
@@ -39,9 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'ArrowLeft':
                     dx = -STEP_SIZE;
                     break;
+                break;
                 case 'ArrowRight':
                     dx = STEP_SIZE;
                     break;
+                case ' ': // Spacebar to start/stop listening
+                    if (voiceListener.isListening) {
+                        voiceListener.stopListening();
+                    } else {
+                        voiceListener.startListening();
+                    }
+                    event.preventDefault();
+                    return;
                 default:
                     return; // Ignore other keys
             }
@@ -53,6 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial check for hovered element
         updateHoveredElement();
+
+        // Start voice listener
+        // voiceListener.startListening(); // We'll start it with a key press for now
 
     } else {
         console.error('Could not find the .win95-shell container.');

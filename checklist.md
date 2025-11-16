@@ -22,9 +22,9 @@ This checklist outlines the tasks required to complete the SoundGO project.
 
 | Task | Status | Notes |
 |---|---|---|
-| Implement wake phrase detection | To Do | |
-| Implement single-command recognition | To Do | |
-| Log raw text to transcript panel | To Do | |
+| Implement wake phrase detection | Done | |
+| Implement single-command recognition | Done | |
+| Log raw text to transcript panel | Done | |
 
 ## Milestone 3: Full v1 Grammar + Execution
 

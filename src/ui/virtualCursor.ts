@@ -23,9 +23,9 @@ export class VirtualCursor {
 
     public getHoveredElement(): Element | null {
         // Temporarily hide the cursor to prevent it from being the elementFromPoint
-        this.element.style.display = 'none';
+        this.element.classList.add('hidden');
         const hoveredElement = document.elementFromPoint(this.x, this.y);
-        this.element.style.display = 'block';
+        this.element.classList.remove('hidden');
         return hoveredElement;
     }
 }

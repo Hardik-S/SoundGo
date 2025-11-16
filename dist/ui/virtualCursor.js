@@ -16,7 +16,11 @@ export class VirtualCursor {
     move(dx, dy) {
         this.setPosition(this.x + dx, this.y + dy);
     }
-    getPosition() {
-        return { x: this.x, y: this.y };
+    getHoveredElement() {
+        // Temporarily hide the cursor to prevent it from being the elementFromPoint
+        this.element.classList.add('hidden');
+        const hoveredElement = document.elementFromPoint(this.x, this.y);
+        this.element.classList.remove('hidden');
+        return hoveredElement;
     }
 }

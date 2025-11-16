@@ -41,8 +41,18 @@ body {
 
     transform: translate(-50%, -50%);
 
-    z-index: 9999;
+        z-index: 9999;
 
-    pointer-events: none; /* So it doesn't interfere with mouse events on other elements */
+        pointer-events: none; /* So it doesn't interfere with mouse events on other elements */
 
-}
+    }
+
+    
+
+    .virtual-cursor.hidden {
+
+        display: none;
+
+    }
+
+    
