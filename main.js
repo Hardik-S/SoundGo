@@ -50,7 +50,7 @@
   // src/commands/commandParser.ts
   function parseCommand(transcript) {
     console.log("Parsing transcript:", transcript);
-    const lowerTranscript = transcript.toLowerCase().trim();
+    const lowerTranscript = transcript.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
     console.log("Normalized transcript:", lowerTranscript);
     const moveCursorRegex = /^(move|go) (cursor)? ?(up|down|left|right)( by (\d+)( pixels)?)?$/;
     const moveCursorMatch = lowerTranscript.match(moveCursorRegex);
