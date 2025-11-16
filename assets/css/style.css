@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.win95-shell {
+    width: 75%;
+    background-color: #008080; /* Windows 95 teal */
+}
+
+.transcript-panel {
+    width: 25%;
+    background-color: #c0c0c0; /* Windows 95 silver */
+    border-left: 2px solid #808080;
+}
