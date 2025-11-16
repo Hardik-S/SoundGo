@@ -1,11 +1,16 @@
 import { VirtualCursor } from './ui/virtualCursor';
 import { voiceListener } from './voice/voiceListener';
+import { Win95Shell } from './ui/win95Shell';
+import { initializeCommandExecutor } from './commands/commandExecutor';
 
 document.addEventListener('DOMContentLoaded', () => {
     const shellContainer = document.querySelector<HTMLElement>('.win95-shell');
     if (shellContainer) {
         const cursor = new VirtualCursor(shellContainer);
-        console.log('Virtual cursor initialized.');
+        const shell = new Win95Shell(shellContainer);
+        initializeCommandExecutor(cursor, shell);
+
+        console.log('Virtual cursor and shell initialized.');
 
         const STEP_SIZE = 10; // Pixels to move per key press
         let currentHoveredElement: Element | null = null;
