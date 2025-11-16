@@ -1,0 +1,25 @@
+{
+  "name": "soundgo",
+  "version": "1.0.0",
+  "description": "This project is a web-based Windows 95-style environment where the user controls a virtual mouse and keyboard entirely by voice.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --platform=browser"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hardik-S/SoundGo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hardik-S/SoundGo/issues"
+  },
+  "homepage": "https://github.com/Hardik-S/SoundGo#readme",
+  "devDependencies": {
+    "esbuild": "^0.27.0",
+    "typescript": "^5.9.3"
+  }
+}
