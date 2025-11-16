@@ -15,7 +15,7 @@ This checklist outlines the tasks required to complete the SoundGO project.
 | Task | Status | Notes |
 |---|---|---|
 | Implement virtual cursor rendering | Done | |
-| Implement cursor movement via keyboard | To Do | |
+| Implement cursor movement via keyboard | Done | |
 | Implement hit-testing for UI elements | To Do | |
 
 ## Milestone 2: Voice Input Integration

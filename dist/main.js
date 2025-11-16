@@ -30,6 +30,29 @@
     if (shellContainer) {
       const cursor = new VirtualCursor(shellContainer);
       console.log("Virtual cursor initialized.");
+      const STEP_SIZE = 10;
+      document.addEventListener("keydown", (event) => {
+        let dx = 0;
+        let dy = 0;
+        switch (event.key) {
+          case "ArrowUp":
+            dy = -STEP_SIZE;
+            break;
+          case "ArrowDown":
+            dy = STEP_SIZE;
+            break;
+          case "ArrowLeft":
+            dx = -STEP_SIZE;
+            break;
+          case "ArrowRight":
+            dx = STEP_SIZE;
+            break;
+          default:
+            return;
+        }
+        cursor.move(dx, dy);
+        event.preventDefault();
+      });
     } else {
       console.error("Could not find the .win95-shell container.");
     }
