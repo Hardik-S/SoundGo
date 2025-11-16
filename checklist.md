@@ -32,7 +32,7 @@ This checklist outlines the tasks required to complete the SoundGO project.
 |---|---|---|
 | Implement all command parsing | Done | |
 | Implement command execution | Done | |
-| Handle command errors gracefully | To Do | |
+| Handle command errors gracefully | Done | |
 
 ## Milestone 4: Polish
 

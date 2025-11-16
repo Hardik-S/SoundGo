@@ -1,5 +1,6 @@
 // src/commands/commandExecutor.ts
 
+import { transcriptPanel } from "../ui/transcriptPanel";
 import {
     Command,
     CommandType,
@@ -60,7 +61,7 @@ export function executeCommand(command: Command): void {
                 console.log(`Clicking on:`, hoveredElement);
                 (hoveredElement as HTMLElement).click();
             } else {
-                console.warn("No element to click.");
+                transcriptPanel.logError("Cannot click: No element is under the cursor.");
             }
             break;
         case CommandType.Open:
@@ -69,20 +70,20 @@ export function executeCommand(command: Command): void {
             break;
         case CommandType.Type:
             const typeCommand = command as TypeCommand;
-            console.log(`Typing text: "${typeCommand.args.text}".`);
+            transcriptPanel.logError(`Command not implemented: "Type"`);
             // TODO: Implement actual typing
             break;
         case CommandType.Scroll:
             const scrollCommand = command as ScrollCommand;
-            console.log(`Scrolling ${scrollCommand.args.direction} by ${scrollCommand.args.distance || 'default'} units.`);
+            transcriptPanel.logError(`Command not implemented: "Scroll"`);
             // TODO: Implement actual scrolling
             break;
         case CommandType.Unknown:
             const unknownCommand = command as UnknownCommand;
-            console.warn(`Unknown command: "${unknownCommand.originalText}".`);
+            transcriptPanel.logError(`Unknown command: "${unknownCommand.originalText}"`);
             break;
         default:
-            console.error("Unhandled command type:", command.type);
+            transcriptPanel.logError(`Unhandled command type: "${command.type}"`);
             break;
     }
 }

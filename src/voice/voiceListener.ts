@@ -40,7 +40,7 @@ class VoiceListener {
 
         this.recognition.onerror = (event: any) => {
             console.error('Speech recognition error:', event.error);
-            transcriptPanel.log(`Error: ${event.error}`);
+            transcriptPanel.logError(`Speech recognition error: ${event.error}`);
             this._isListening = false;
         };
     }
