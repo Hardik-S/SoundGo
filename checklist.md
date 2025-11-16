@@ -30,7 +30,7 @@ This checklist outlines the tasks required to complete the SoundGO project.
 
 | Task | Status | Notes |
 |---|---|---|
-| Implement all command parsing | To Do | |
+| Implement all command parsing | Done | |
 | Implement command execution | To Do | |
 | Handle command errors gracefully | To Do | |
 

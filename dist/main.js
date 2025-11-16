@@ -46,6 +46,99 @@
   };
   var transcriptPanel = new TranscriptPanel();
 
+  // src/commands/commandParser.ts
+  function parseCommand(transcript) {
+    const lowerTranscript = transcript.toLowerCase().trim();
+    const moveCursorMatch = lowerTranscript.match(/^(move|go) (cursor)? (up|down|left|right)( by (\d+) (pixels)?)?$/);
+    if (moveCursorMatch) {
+      const direction = moveCursorMatch[3];
+      const distance = moveCursorMatch[5] ? parseInt(moveCursorMatch[5], 10) : void 0;
+      return {
+        type: "MOVE_CURSOR" /* MoveCursor */,
+        originalText: transcript,
+        args: { direction, distance }
+      };
+    }
+    const clickMatch = lowerTranscript.match(/^(click|left click|right click)$/);
+    if (clickMatch) {
+      let button = "left";
+      if (clickMatch[1] === "right click") {
+        button = "right";
+      }
+      return {
+        type: "CLICK" /* Click */,
+        originalText: transcript,
+        args: { button }
+      };
+    }
+    const openMatch = lowerTranscript.match(/^open (.+)$/);
+    if (openMatch) {
+      const appName = openMatch[1].trim();
+      return {
+        type: "OPEN" /* Open */,
+        originalText: transcript,
+        args: { appName }
+      };
+    }
+    const typeMatch = lowerTranscript.match(/^type (.+)$/);
+    if (typeMatch) {
+      const text = typeMatch[1].trim();
+      return {
+        type: "TYPE" /* Type */,
+        originalText: transcript,
+        args: { text }
+      };
+    }
+    const scrollMatch = lowerTranscript.match(/^scroll (up|down)( by (\d+))?$/);
+    if (scrollMatch) {
+      const direction = scrollMatch[1];
+      const distance = scrollMatch[3] ? parseInt(scrollMatch[3], 10) : void 0;
+      return {
+        type: "SCROLL" /* Scroll */,
+        originalText: transcript,
+        args: { direction, distance }
+      };
+    }
+    return {
+      type: "UNKNOWN" /* Unknown */,
+      originalText: transcript
+    };
+  }
+
+  // src/commands/commandExecutor.ts
+  function executeCommand(command) {
+    console.log("Executing command:", command);
+    switch (command.type) {
+      case "MOVE_CURSOR" /* MoveCursor */:
+        const moveCommand = command;
+        console.log(`Moving cursor ${moveCommand.args.direction} by ${moveCommand.args.distance || "default"} pixels.`);
+        break;
+      case "CLICK" /* Click */:
+        const clickCommand = command;
+        console.log(`Performing a ${clickCommand.args?.button || "left"} click.`);
+        break;
+      case "OPEN" /* Open */:
+        const openCommand = command;
+        console.log(`Opening application: ${openCommand.args.appName}.`);
+        break;
+      case "TYPE" /* Type */:
+        const typeCommand = command;
+        console.log(`Typing text: "${typeCommand.args.text}".`);
+        break;
+      case "SCROLL" /* Scroll */:
+        const scrollCommand = command;
+        console.log(`Scrolling ${scrollCommand.args.direction} by ${scrollCommand.args.distance || "default"} units.`);
+        break;
+      case "UNKNOWN" /* Unknown */:
+        const unknownCommand = command;
+        console.warn(`Unknown command: "${unknownCommand.originalText}".`);
+        break;
+      default:
+        console.error("Unhandled command type:", command.type);
+        break;
+    }
+  }
+
   // src/voice/voiceListener.ts
   var VoiceListener = class {
     constructor() {
@@ -60,9 +153,11 @@
       this.recognition.lang = "en-US";
       this.recognition.onresult = (event) => {
         const last = event.results.length - 1;
-        const command = event.results[last][0].transcript;
-        console.log("Voice Command:", command);
-        transcriptPanel.log(`You said: "${command}"`);
+        const commandText = event.results[last][0].transcript;
+        console.log("Voice Command:", commandText);
+        transcriptPanel.log(`You said: "${commandText}"`);
+        const command = parseCommand(commandText);
+        executeCommand(command);
       };
       this.recognition.onend = () => {
         this._isListening = false;
@@ -146,6 +241,7 @@
         event.preventDefault();
       });
       updateHoveredElement();
+      voiceListener.startListening();
     } else {
       console.error("Could not find the .win95-shell container.");
     }

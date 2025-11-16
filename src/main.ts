@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateHoveredElement();
 
         // Start voice listener
-        // voiceListener.startListening(); // We'll start it with a key press for now
+        voiceListener.startListening();
 
     } else {
         console.error('Could not find the .win95-shell container.');

@@ -1,6 +1,6 @@
 import { transcriptPanel } from '../ui/transcriptPanel';
-
-
+import { parseCommand } from '../commands/commandParser';
+import { executeCommand } from '../commands/commandExecutor';
 
 class VoiceListener {
     private recognition: any;
@@ -24,10 +24,12 @@ class VoiceListener {
 
         this.recognition.onresult = (event: any) => {
             const last = event.results.length - 1;
-            const command = event.results[last][0].transcript;
-            console.log('Voice Command:', command);
-            transcriptPanel.log(`You said: "${command}"`);
-            // Here we would typically pass the command to a command parser
+            const commandText = event.results[last][0].transcript;
+            console.log('Voice Command:', commandText);
+            transcriptPanel.log(`You said: "${commandText}"`);
+
+            const command = parseCommand(commandText);
+            executeCommand(command);
         };
 
         this.recognition.onend = () => {
