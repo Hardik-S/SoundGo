@@ -106,20 +106,49 @@
   }
 
   // src/commands/commandExecutor.ts
+  var cursor;
+  var shell;
+  function initializeCommandExecutor(cursorInstance, shellInstance) {
+    cursor = cursorInstance;
+    shell = shellInstance;
+  }
   function executeCommand(command) {
     console.log("Executing command:", command);
     switch (command.type) {
       case "MOVE_CURSOR" /* MoveCursor */:
         const moveCommand = command;
-        console.log(`Moving cursor ${moveCommand.args.direction} by ${moveCommand.args.distance || "default"} pixels.`);
+        const distance = moveCommand.args.distance || 50;
+        let dx = 0;
+        let dy = 0;
+        switch (moveCommand.args.direction) {
+          case "up":
+            dy = -distance;
+            break;
+          case "down":
+            dy = distance;
+            break;
+          case "left":
+            dx = -distance;
+            break;
+          case "right":
+            dx = distance;
+            break;
+        }
+        cursor.move(dx, dy);
         break;
       case "CLICK" /* Click */:
         const clickCommand = command;
-        console.log(`Performing a ${clickCommand.args?.button || "left"} click.`);
+        const hoveredElement = cursor.getHoveredElement();
+        if (hoveredElement) {
+          console.log(`Clicking on:`, hoveredElement);
+          hoveredElement.click();
+        } else {
+          console.warn("No element to click.");
+        }
         break;
       case "OPEN" /* Open */:
         const openCommand = command;
-        console.log(`Opening application: ${openCommand.args.appName}.`);
+        shell.openApp(openCommand.args.appName);
         break;
       case "TYPE" /* Type */:
         const typeCommand = command;
@@ -190,16 +219,61 @@
   };
   var voiceListener = new VoiceListener();
 
+  // src/ui/win95Shell.ts
+  var Win95Shell = class {
+    constructor(container) {
+      this.container = container;
+    }
+    openApp(appName) {
+      console.log(`Opening app: ${appName}`);
+      const windowElement = this.createWindow(appName);
+      this.container.appendChild(windowElement);
+    }
+    createWindow(title) {
+      const windowElement = document.createElement("div");
+      windowElement.classList.add("window");
+      windowElement.style.position = "absolute";
+      windowElement.style.left = `${Math.random() * 200 + 50}px`;
+      windowElement.style.top = `${Math.random() * 200 + 50}px`;
+      windowElement.style.width = "300px";
+      windowElement.style.height = "200px";
+      windowElement.style.border = "2px solid #000";
+      windowElement.style.backgroundColor = "#c0c0c0";
+      windowElement.style.boxShadow = "5px 5px 0px rgba(0,0,0,0.5)";
+      const titleBar = document.createElement("div");
+      titleBar.classList.add("title-bar");
+      titleBar.style.backgroundColor = "#000080";
+      titleBar.style.color = "#fff";
+      titleBar.style.padding = "3px";
+      titleBar.style.fontWeight = "bold";
+      titleBar.textContent = title;
+      const closeButton = document.createElement("button");
+      closeButton.textContent = "X";
+      closeButton.style.float = "right";
+      closeButton.style.border = "1px solid #fff";
+      closeButton.style.backgroundColor = "#c0c0c0";
+      closeButton.style.color = "#000";
+      closeButton.onclick = () => {
+        windowElement.remove();
+      };
+      titleBar.appendChild(closeButton);
+      windowElement.appendChild(titleBar);
+      return windowElement;
+    }
+  };
+
   // src/main.ts
   document.addEventListener("DOMContentLoaded", () => {
     const shellContainer = document.querySelector(".win95-shell");
     if (shellContainer) {
-      const cursor = new VirtualCursor(shellContainer);
-      console.log("Virtual cursor initialized.");
+      const cursor2 = new VirtualCursor(shellContainer);
+      const shell2 = new Win95Shell(shellContainer);
+      initializeCommandExecutor(cursor2, shell2);
+      console.log("Virtual cursor and shell initialized.");
       const STEP_SIZE = 10;
       let currentHoveredElement = null;
       const updateHoveredElement = () => {
-        const newHoveredElement = cursor.getHoveredElement();
+        const newHoveredElement = cursor2.getHoveredElement();
         if (newHoveredElement !== currentHoveredElement) {
           if (currentHoveredElement) {
           }
@@ -236,7 +310,7 @@
           default:
             return;
         }
-        cursor.move(dx, dy);
+        cursor2.move(dx, dy);
         updateHoveredElement();
         event.preventDefault();
       });
