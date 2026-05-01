@@ -65,7 +65,8 @@ function findEditableTarget(hoveredElement: Element | null): HTMLElement | null 
         return hoveredElement;
     }
 
-    return hoveredElement?.closest<HTMLElement>("input, textarea, [contenteditable='true']") ?? null;
+    const closestEditable = hoveredElement?.closest<HTMLElement>("input, textarea, [contenteditable]") ?? null;
+    return isEditableElement(closestEditable) ? closestEditable : null;
 }
 
 function dispatchInputEvent(element: HTMLElement, text: string): void {
@@ -80,6 +81,17 @@ function dispatchInputEvent(element: HTMLElement, text: string): void {
     element.dispatchEvent(event);
 }
 
+function getContentEditableSelection(element: HTMLElement): Range | null {
+    const selection = typeof window.getSelection === "function" ? window.getSelection() : null;
+    if (!selection || selection.rangeCount === 0) {
+        return null;
+    }
+
+    const range = selection.getRangeAt(0);
+    const anchorNode = range.commonAncestorContainer;
+    return element.contains(anchorNode) ? range : null;
+}
+
 function typeTextIntoElement(element: HTMLElement, text: string): void {
     element.focus();
 
@@ -89,6 +101,21 @@ function typeTextIntoElement(element: HTMLElement, text: string): void {
         element.value = `${element.value.slice(0, start)}${text}${element.value.slice(end)}`;
         const nextCursorPosition = start + text.length;
         element.setSelectionRange(nextCursorPosition, nextCursorPosition);
+        dispatchInputEvent(element, text);
+        return;
+    }
+
+    const selectionRange = getContentEditableSelection(element);
+    if (selectionRange) {
+        selectionRange.deleteContents();
+        const textNode = document.createTextNode(text);
+        selectionRange.insertNode(textNode);
+        selectionRange.setStartAfter(textNode);
+        selectionRange.collapse(true);
+
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(selectionRange);
         dispatchInputEvent(element, text);
         return;
     }
