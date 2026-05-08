@@ -18,7 +18,7 @@ import {
  */
 export function parseCommand(transcript: string): Command {
     console.log("Parsing transcript:", transcript);
-    const lowerTranscript = transcript.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    const lowerTranscript = normalizeTranscript(transcript);
     console.log("Normalized transcript:", lowerTranscript);
 
     // --- Move Cursor Command ---
@@ -97,4 +97,14 @@ export function parseCommand(transcript: string): Command {
         type: CommandType.Unknown,
         originalText: transcript,
     } as UnknownCommand;
+}
+
+function normalizeTranscript(transcript: string): string {
+    return transcript
+        .toLowerCase()
+        .trim()
+        .replace(/[\/#!$%^&*;:{}=\-_`~()]/g, " ")
+        .replace(/[.,]+(?=\s|$)/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
 }
